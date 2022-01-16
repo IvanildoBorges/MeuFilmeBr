@@ -21,13 +21,12 @@ function Listing() {
     });
 
     useEffect(() => {
-        //Forma errada
         axios.get(`${BASE_URL}/movies?size=${Page.size}&page=${PageNumber}&sort=title`)
             .then(response => {
                 const data = response.data as MoviePage;
                 setPage(data);
             });
-    }, [PageNumber]);
+    }, [PageNumber, Page.size]);
 
     return (
         <>
