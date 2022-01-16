@@ -7,13 +7,13 @@ import { BASE_URL } from "utils/requests";
 
 function Listing() {
 
-    const [PageNumber, setPageNumber] = useState(0);
-    const [Page, setPage] = useState<MoviePage>({
+    const [pageNumber, setPageNumber] = useState(0);
+    const [page, setPage] = useState<MoviePage>({
         content: [],
         last: true,
         totalPages: 0,
         totalElements: 0,
-        size: 29,
+        size: 5,
         number: 0,
         first: true,
         numberOfElements: 0,
@@ -21,21 +21,25 @@ function Listing() {
     });
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/movies?size=${Page.size}&page=${PageNumber}&sort=id`)
+        axios.get(`${BASE_URL}/movies?size=${page.size}&page=${pageNumber}&sort=id,asc`)
             .then(response => {
                 const data = response.data as MoviePage;
                 setPage(data);
             });
-    }, [PageNumber, Page.size]);
+    }, [pageNumber, page.size]);
+
+    const handlePageChange = (newPageNumber: number) => {
+        setPageNumber(newPageNumber);
+    }
 
     return (
         <>
-            <Pagination />
+            <Pagination page={page} onChange={handlePageChange} />
 
             <div className="container">
                 <div className="row">
                     {
-                        Page.content.map(movie => (
+                        page.content.map(movie => (
                                 <div key={movie.id} className="col-sm-6 col-lg-4 col-xl-3 mb-5">
                                     <MovieCard movie={movie} />
                                 </div>
